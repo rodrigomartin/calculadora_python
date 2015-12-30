@@ -106,3 +106,5 @@ class Calculadora:
 ecuacion = raw_input("Ingrese ecuacion: ")
 c = Calculadora(ecuacion);
 c.resolver()
+
+# en rama optimizacion
