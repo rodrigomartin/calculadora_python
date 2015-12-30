@@ -19,92 +19,44 @@ class Calculadora:
 		array_ecuacion.append(nro)
 		return array_ecuacion
 	
+	def calcular(self,operacion,contador):
+		while contador > 0:
+			pos = self.array_resultado.index(operacion);
+			nro1 = float(self.array_resultado[pos-1])
+			nro2 = float(self.array_resultado[pos+1])
 
-	def multiplicar(self):
-		resp = True
-		i=0
+			if operacion == "*":
+				resultado = nro1 * nro2
+			if operacion == "/":
+				resultado = nro1 / nro2
+			if operacion == "+":
+				resultado = nro1 + nro2
+			if operacion == "-":
+				resultado = nro1 - nro2
 
-		for elemento in self.array_resultado:
-			if not elemento.isdigit():
-				if elemento == "*":
-					nro1 = int(self.array_resultado[i-1])
-					nro2 = int(self.array_resultado[i+1])
-					resultado = nro1 * nro2
-					self.array_resultado[i-1:i+2] = [str(resultado)]
-					resp = False
-					break
-			i=i+1
-		return resp
-
-	def dividir(self):
-		resp = True
-		i=0
-
-		for elemento in self.array_resultado:
-			if not elemento.isdigit():
-				if elemento == "/":
-					nro1 = int(self.array_resultado[i-1])
-					nro2 = int(self.array_resultado[i+1])
-					resultado = nro1 / nro2
-					self.array_resultado[i-1:i+2] = [str(resultado)]
-					resp = False
-					break
-			i=i+1
-		return resp
-
-	def restar(self):
-		resp = True
-		i=0
-
-		for elemento in self.array_resultado:
-			if not elemento.isdigit():
-				if elemento == "/":
-					nro1 = int(self.array_resultado[i-1])
-					nro2 = int(self.array_resultado[i+1])
-					resultado = nro1 / nro2
-					self.array_resultado[i-1:i+2] = [str(resultado)]
-					resp = False
-					break
-			i=i+1
-		return resp
-	
-	def sumar(self):
-		resp = True
-		i=0
-
-		for elemento in self.array_resultado:
-			if not elemento.isdigit():
-				if elemento == "+":
-					nro1 = int(self.array_resultado[i-1])
-					nro2 = int(self.array_resultado[i+1])
-					resultado = nro1 + nro2
-					self.array_resultado[i-1:i+2] = [str(resultado)]
-					resp = False
-					break
-			i=i+1
-		return resp
-
+			self.array_resultado[pos-1:pos+2] = [str(resultado)]
+			contador = contador-1
+			print self.array_resultado
+		
 	def resolver(self):
 		array_ecuacion = self.get_array_ecuacion(self.ecuacion)
 		self.array_resultado = array_ecuacion
 		resultado = 0
 
+		contador = self.array_resultado.count("*")
+		self.calcular("*",contador)
 
-		while self.dividir() is False:
-			print self.array_resultado
+		contador = self.array_resultado.count("/")
+		self.calcular("/",contador)
 
-		while self.multiplicar() is False:
-			print self.array_resultado
+		contador = self.array_resultado.count("+")
+		self.calcular("+",contador)
 
-		while self.sumar() is False:
-			print self.array_resultado
+		contador = self.array_resultado.count("-")
+		self.calcular("-",contador)
 
-		while self.restar() is False:
-			print self.array_resultado
 
 # ------------------------------------------------
 ecuacion = raw_input("Ingrese ecuacion: ")
 c = Calculadora(ecuacion);
 c.resolver()
-
-# en rama optimizacion
