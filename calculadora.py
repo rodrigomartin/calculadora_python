@@ -1,62 +1,97 @@
 class Calculadora:
 	def __init__(self,ecuacion):
-		self.ecuacion = ecuacion
-		self.array_resultado = []
-		self.pos_multiplicacion = 0
-
+		self.ecuacion_original = ecuacion
+		self.ecuacion = self.get_array_ecuacion(ecuacion)
+		self.ini = 0
+		self.fin = 0
 	
 	def get_array_ecuacion(self,ecuacion):
-		nro = ""
+		nro = ''
 		array_ecuacion = []
-		for caracter in self.ecuacion:
-			if caracter.isdigit():
-				nro = nro + caracter
+
+		for char in ecuacion:
+			if char.isdigit():
+				nro = nro + char
 			else:
-				array_ecuacion.append(nro)
-				array_ecuacion.append(caracter)
-				nro = ""
+				if nro != '':
+					array_ecuacion.append(nro)
+					nro = ''
+				array_ecuacion.append(char)
+			
+		if nro != '':
+			array_ecuacion.append(nro)
 
-		array_ecuacion.append(nro)
 		return array_ecuacion
-	
-	def calcular(self,operacion,contador):
-		while contador > 0:
-			pos = self.array_resultado.index(operacion);
-			nro1 = float(self.array_resultado[pos-1])
-			nro2 = float(self.array_resultado[pos+1])
 
-			if operacion == "*":
+	def get_ecuacion(self):
+		ecuacion = []
+		aux = []
+		if self.ecuacion.count(')'):
+			i = self.ecuacion.index(')')
+			self.fin = i+1
+		
+			while i > 0:
+				i = i-1
+				if self.ecuacion[i] == '(':
+					self.ini = i
+					break
+				else:
+					ecuacion.append(self.ecuacion[i])
+			ecuacion.reverse()
+		else:
+			self.ini = 0
+			self.fin = len(self.ecuacion)
+			ecuacion = self.ecuacion
+		return ecuacion
+	
+	def actualizar_ecuacion(self,ecuacion):
+		self.ecuacion[self.ini:self.fin] = ecuacion
+
+	def calcular(self,ecuacion,operacion,contador):
+		while contador > 0:
+			pos = ecuacion.index(operacion);
+			nro1 = float(ecuacion[pos-1])
+			nro2 = float(ecuacion[pos+1])
+
+			if operacion == '*':
 				resultado = nro1 * nro2
-			if operacion == "/":
+			if operacion == '/':
 				resultado = nro1 / nro2
-			if operacion == "+":
+			if operacion == '+':
 				resultado = nro1 + nro2
-			if operacion == "-":
+			if operacion == '-':
 				resultado = nro1 - nro2
 
-			self.array_resultado[pos-1:pos+2] = [str(resultado)]
+			ecuacion[pos-1:pos+2] = [str(resultado)]
 			contador = contador-1
-			print self.array_resultado
+		return ecuacion
 		
 	def resolver(self):
-		array_ecuacion = self.get_array_ecuacion(self.ecuacion)
-		self.array_resultado = array_ecuacion
-		resultado = 0
+		ecuaciones = self.ecuacion.count(')')
 
-		contador = self.array_resultado.count("*")
-		self.calcular("*",contador)
+		while ecuaciones >= 0:
+			ecuaciones = ecuaciones-1
+			ecuacion = self.get_ecuacion()
 
-		contador = self.array_resultado.count("/")
-		self.calcular("/",contador)
+			contador = ecuacion.count('*')
+			ecuacion = self.calcular(ecuacion,'*',contador)
 
-		contador = self.array_resultado.count("+")
-		self.calcular("+",contador)
+			contador = ecuacion.count('/')
+			ecuacion = self.calcular(ecuacion,'/',contador)
 
-		contador = self.array_resultado.count("-")
-		self.calcular("-",contador)
+			contador = ecuacion.count('+')
+			ecuacion = self.calcular(ecuacion,'+',contador)
+
+			contador = ecuacion.count('-')
+			ecuacion = self.calcular(ecuacion,'-',contador)
+
+			self.actualizar_ecuacion(ecuacion)
+		
+		resultado = ecuacion[0]
+		print "Resultado " + str(resultado)
 
 
 # ------------------------------------------------
-ecuacion = raw_input("Ingrese ecuacion: ")
+ecuacion = raw_input('Ingrese ecuacion: ')
 c = Calculadora(ecuacion);
 c.resolver()
