@@ -4,13 +4,14 @@ class Calculadora:
 		self.ecuacion = self.get_array_ecuacion(ecuacion)
 		self.ini = 0
 		self.fin = 0
+		self.resultado = ""
 	
 	def get_array_ecuacion(self,ecuacion):
 		nro = ''
 		array_ecuacion = []
 
 		for char in ecuacion:
-			if char.isdigit():
+			if char.isdigit() or char == '.':
 				nro = nro + char
 			else:
 				if nro != '':
@@ -87,11 +88,4 @@ class Calculadora:
 
 			self.actualizar_ecuacion(ecuacion)
 		
-		resultado = ecuacion[0]
-		print "Resultado " + str(resultado)
-
-
-# ------------------------------------------------
-ecuacion = raw_input('Ingrese ecuacion: ')
-c = Calculadora(ecuacion);
-c.resolver()
+		self.resultado = float(ecuacion[0])
